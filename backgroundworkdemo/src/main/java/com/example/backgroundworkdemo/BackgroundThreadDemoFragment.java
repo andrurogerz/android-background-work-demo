@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.backgroundworkdemo.tasks.IteratingAsyncTask;
+
 import java.util.ArrayList;
 
 public class BackgroundThreadDemoFragment extends ListFragment {
@@ -22,10 +24,10 @@ public class BackgroundThreadDemoFragment extends ListFragment {
   private Handler mHandler;
   private BackgroundWorker.BackgroundWorkCallback mCallback;
 
-  static private ArrayList<SimpleThreadBackgroundWorker> sBackgroundWorkers = new ArrayList<SimpleThreadBackgroundWorker>();
+  static private ArrayList<BackgroundWorker> sBackgroundWorkers = new ArrayList<BackgroundWorker>();
   static private int sLastWorkerId = 0;
 
-  private class BackgroundWorkerAdapter extends ArrayAdapter<SimpleThreadBackgroundWorker> {
+  private class BackgroundWorkerAdapter extends ArrayAdapter<BackgroundWorker> {
 
     public BackgroundWorkerAdapter() {
       super(getActivity(), R.layout.list_item_thread, sBackgroundWorkers);
@@ -47,7 +49,6 @@ public class BackgroundThreadDemoFragment extends ListFragment {
               Log.d(TAG, worker + " iteration: " + value);
             }
           });
-
         }
 
         @Override
@@ -67,7 +68,6 @@ public class BackgroundThreadDemoFragment extends ListFragment {
               Log.d(TAG, worker + " complete!");
             }
           });
-
         }
       };
     }
@@ -123,11 +123,18 @@ public class BackgroundThreadDemoFragment extends ListFragment {
     mHandler = new Handler();
   }
 
-  private void startWorker(ProcessThreadPriority priority) {
+  private void startWorkerThread(ProcessThreadPriority priority) {
     String workerId = new Integer(++sLastWorkerId).toString();
     SimpleThreadBackgroundWorker worker = new SimpleThreadBackgroundWorker(workerId, priority);
     mListAdapter.add(worker);
     worker.start();
+  }
+
+  private void startAsyncTask() {
+    String workerId = new Integer(++sLastWorkerId).toString();
+    IteratingAsyncTask task = new IteratingAsyncTask(workerId);
+    mListAdapter.add(task);
+    task.start();
   }
 
   @Override
@@ -138,7 +145,7 @@ public class BackgroundThreadDemoFragment extends ListFragment {
     button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        startWorker(ProcessThreadPriority.BACKGROUND);
+        startWorkerThread(ProcessThreadPriority.BACKGROUND);
       }
     });
 
@@ -146,15 +153,15 @@ public class BackgroundThreadDemoFragment extends ListFragment {
     button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        startWorker(ProcessThreadPriority.DEFAULT);
+        startWorkerThread(ProcessThreadPriority.DEFAULT);
       }
     });
 
-    button = (Button) view.findViewById(R.id.button_startForegroundThread);
+    button = (Button) view.findViewById(R.id.button_startAsyncTask);
     button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        startWorker(ProcessThreadPriority.FOREGROUND);
+        startAsyncTask();
       }
     });
 

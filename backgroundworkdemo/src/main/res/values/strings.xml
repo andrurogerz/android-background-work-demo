@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BackgroundWorkDemo</string>
-    <string name="foreground_thread">Foreground</string>
+    <string name="async_task">AsyncTask</string>
     <string name="default_thread">Default</string>
     <string name="background_thread">Background</string>
 </resources>

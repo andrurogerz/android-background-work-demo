@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <Button
-        android:id="@+id/button_startForegroundThread"
+        android:id="@+id/button_startAsyncTask"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="@string/foreground_thread"
+        android:text="@string/async_task"
         />
     <Button
         android:id="@+id/button_startDefaultThread"
