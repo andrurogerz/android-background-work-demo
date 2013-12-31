@@ -58,6 +58,9 @@ public class IteratingAsyncTask extends AsyncTask implements BackgroundWorker {
 
   @Override
   public int getProgress() {
+    if (!isRunning()) {
+      return getIterations();
+    }
     return mCurrent;
   }
 
